@@ -1,12 +1,62 @@
 ﻿<Window x:Class="SlideControlApp.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SlideControlApp"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Slide Control" Height="450" Width="800">
     <Grid>
-
+        <Canvas Name="StageCanvas" Background="LightGray" Width="400" Height="400" MouseLeftButtonDown="StageCanvas_MouseLeftButtonDown">
+            <Ellipse Name="StagePosition" Width="10" Height="10" Fill="Red" />
+            <Ellipse Name="MotorXPosition" Width="10" Height="10" Fill="Blue" />
+            <Ellipse Name="MotorYPosition" Width="10" Height="10" Fill="Green" />
+            <Ellipse Name="MotorZPosition" Width="10" Height="10" Fill="Yellow" />
+        </Canvas>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
+            <Label Content="Motor Speeds" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="X:" />
+                <TextBox Name="SpeedX" Width="50" Text="1" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Y:" />
+                <TextBox Name="SpeedY" Width="50" Text="1" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Z:" />
+                <TextBox Name="SpeedZ" Width="50" Text="1" />
+            </StackPanel>
+            <Button Content="Set Speeds" Click="SetSpeeds_Click" />
+            <Label Content="Move Motors Separately" Margin="10,10,0,0" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="X:" />
+                <TextBox Name="MoveX" Width="50" Text="0" />
+                <Button Content="Move" Click="MoveX_Click" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Y:" />
+                <TextBox Name="MoveY" Width="50" Text="0" />
+                <Button Content="Move" Click="MoveY_Click" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Z:" />
+                <TextBox Name="MoveZ" Width="50" Text="0" />
+                <Button Content="Move" Click="MoveZ_Click" />
+            </StackPanel>
+            <Label Content="Legend:" Margin="10,10,0,0" />
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="10" Height="10" Fill="Red" VerticalAlignment="Center" Margin="5" />
+                <Label Content="Stage Position" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="10" Height="10" Fill="Blue" VerticalAlignment="Center" Margin="5" />
+                <Label Content="Motor X Position" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="10" Height="10" Fill="Green" VerticalAlignment="Center" Margin="5" />
+                <Label Content="Motor Y Position" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="10" Height="10" Fill="Yellow" VerticalAlignment="Center" Margin="5" />
+                <Label Content="Motor Z Position" VerticalAlignment="Center" />
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>
