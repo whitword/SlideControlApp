@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reflection;
+using System.Threading.Tasks;
 
 namespace SlideControlApp.Models
 {
@@ -15,14 +16,20 @@ namespace SlideControlApp.Models
 
         public async Task MoveToAsync(int targetPosition)
         {
+            int minDelay = 10; // minimum késleltetés milliszekundumban
+            int maxDelay = 100; // maximum késleltetés milliszekundumban
+
+            var delay = Math.Max(minDelay, (int)(Speed * minDelay / maxDelay));
+
             while (Position != targetPosition)
             {
+                int step = Math.Min(Speed, Math.Abs(targetPosition - Position));
                 if (Position < targetPosition)
-                    Position += 1;
+                    Position += step;
                 else
-                    Position -= 1;
+                    Position -= step;
 
-                await Task.Delay(100/Speed); // késleltetés a szimulált mozgáshoz
+            await Task.Delay(delay); // késleltetés a szimulált mozgáshoz
             }
         }
     }
