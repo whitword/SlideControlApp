@@ -10,7 +10,7 @@ namespace SlideControlApp.Models
         public Motor()
         {
             Position = 0;
-            Speed = 10; // alapértelmezett sebesség
+            Speed = 1; // alapértelmezett sebesség
         }
 
         public async Task MoveToAsync(int targetPosition)
@@ -18,11 +18,11 @@ namespace SlideControlApp.Models
             while (Position != targetPosition)
             {
                 if (Position < targetPosition)
-                    Position += Speed;
+                    Position += 1;
                 else
-                    Position -= Speed;
+                    Position -= 1;
 
-                await Task.Delay(10); // késleltetés a szimulált mozgáshoz
+                await Task.Delay(100/Speed); // késleltetés a szimulált mozgáshoz
             }
         }
     }

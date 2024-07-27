@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using SlideControlApp.Models;
 using System.Threading;
+using System.Windows.Media.Media3D;
 
 namespace SlideControlApp
 {
@@ -37,23 +38,29 @@ namespace SlideControlApp
             // Alkalmazzuk a transzformációt a Canvas-ra
             StageCanvas.RenderTransform = transformGroup;
         }
-
-
-        private async void StageCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        
+        async void StageCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var position = e.GetPosition(StageCanvas);
-            position.Y = StageCanvas.ActualHeight - position.Y; // Reverse Y axis to match canvas render transform
+            try
+            {
+                var position = e.GetPosition(StageCanvas);
 
             // Logikai koordináták kiszámítása
-            double x = position.X * WindowWidth / StageCanvas.Width;
-            double y = position.Y * WindowHeight / StageCanvas.Height;
+            double x = position.X * WindowWidth / StageCanvas.ActualWidth;
+            double y = position.Y * WindowHeight / StageCanvas.ActualHeight;
 
-            int ix = (int)x;
-            int iy = (int)y;
-            int iz = 0; // Példa kedvéért Z-t 0-nak vesszük
+                int ix = (int)x;
+                int iy = (int)y;
+                int iz = 0; // Példa kedvéért Z-t 0-nak vesszük
 
-            await _stage.MoveToAsync(ix, iy, iz);
-            UpdateStagePosition();
+                await _stage.MoveToAsync(ix, iy, iz);
+
+                UpdateStagePosition();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void SetSpeeds_Click(object sender, RoutedEventArgs e)
@@ -108,15 +115,15 @@ namespace SlideControlApp
         private void UpdateStagePosition()
         {
             // Számítsuk ki a skálázási tényezőket az ablak méretei alapján
-            double scaleX = StageCanvas.Width / WindowWidth;
-            double scaleY = StageCanvas.Height / WindowHeight;
+            double scaleX = StageCanvas.ActualWidth / WindowWidth;
+            double scaleY = StageCanvas.ActualHeight / WindowHeight;
 
             // Asztal pozíciójának frissítése
             double stageX = _stage.MotorX.Position * scaleX;
             double stageY = (WindowHeight - _stage.MotorY.Position) * scaleY; // Invertálás figyelembe vétele
 
             StagePosition.SetValue(Canvas.LeftProperty, stageX - StagePosition.Width / 2);
-            StagePosition.SetValue(Canvas.TopProperty, StageCanvas.Height - stageY - StagePosition.Height / 2);
+            StagePosition.SetValue(Canvas.TopProperty, StageCanvas.ActualHeight - stageY - StagePosition.Height / 2);
 
             // Motorok pozíciójának frissítése
             double motorX = _stage.MotorX.Position * scaleX;
@@ -124,11 +131,11 @@ namespace SlideControlApp
             double motorZ = _stage.MotorZ.Position * scaleX; // Ha az Z tengely is skálázható az X tengelyhez hasonlóan
 
             MotorXPosition.SetValue(Canvas.LeftProperty, motorX - MotorXPosition.Width / 2);
-            MotorXPosition.SetValue(Canvas.TopProperty, StageCanvas.Height - MotorXPosition.Height); // Motor X pozíció
-            MotorYPosition.SetValue(Canvas.LeftProperty, StageCanvas.Width - MotorYPosition.Width); // Motor Y pozíció
-            MotorYPosition.SetValue(Canvas.TopProperty, StageCanvas.Height - motorY - MotorYPosition.Height / 2); // Motor Y pozíció
+            MotorXPosition.SetValue(Canvas.TopProperty, StageCanvas.ActualHeight - MotorXPosition.Height); // Motor X pozíció
+            MotorYPosition.SetValue(Canvas.LeftProperty, StageCanvas.ActualWidth - MotorYPosition.Width); // Motor Y pozíció
+            MotorYPosition.SetValue(Canvas.TopProperty, StageCanvas.ActualHeight - motorY - MotorYPosition.Height / 2); // Motor Y pozíció
             MotorZPosition.SetValue(Canvas.LeftProperty, motorZ - MotorZPosition.Width / 2); // Motor Z pozíció
-            MotorZPosition.SetValue(Canvas.TopProperty, StageCanvas.Height - MotorZPosition.Height / 2); // Motor Z pozíció
+            MotorZPosition.SetValue(Canvas.TopProperty, StageCanvas.ActualHeight - MotorZPosition.Height / 2); // Motor Z pozíció
         }
     }
 }
